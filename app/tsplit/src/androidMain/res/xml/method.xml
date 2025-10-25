@@ -4,6 +4,6 @@
     android:isDefault="true">
     <subtype
         android:label="Tsplit"
-        android:imeSubtypeLocale="en_US"
+        android:imeSubtypeLocale="lolcat"
         android:imeSubtypeMode="keyboard" />
 </input-method>
