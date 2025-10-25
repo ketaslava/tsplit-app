@@ -99,12 +99,23 @@ class Keyboard (private val stack: Stack,
         }
 
         // Process gestures
+        // Start
         val gestureName = newPointers.current.button.gestureName
         if (gestureName != null && newInputLevel > inputLevel && !isInGesture) {
             isInGesture = true
             currentGestureName = gestureName
             currentGestureStartPosition = Pair(newPointers.current.x, newPointers.current.y)
             gestureStartButton = newPointers.current.button
+        }
+        // Stop
+        var isGestureWasJustFinished = false
+        if (newInputLevel < inputLevel && isInGesture) {
+            // Set state and reset data
+            isGestureWasJustFinished = true
+            newIsInputTriggered = true
+            isInGesture = false
+            resetGestureDataFloat()
+            resetGestureDataInt()
         }
 
         // Apply new states
@@ -137,7 +148,7 @@ class Keyboard (private val stack: Stack,
         // Process with all new states
 
         // Process
-        surface = updateGestures(surface)
+        surface = updateGestures(surface, isGestureWasJustFinished)
         updateLongPressActions()
 
         // Return
@@ -219,21 +230,8 @@ class Keyboard (private val stack: Stack,
     }
 
 
-    fun updateGestures(targetSurface: Surface2D): Surface2D {
+    fun updateGestures(targetSurface: Surface2D, isGestureWasJustFinished: Boolean): Surface2D {
         val surface = targetSurface
-
-        // Update state
-        var isGestureWasJustFinished = false
-        if (!pointers.current.isPressed) {
-            // Set state
-            if (isInGesture) {
-                isGestureWasJustFinished = true
-                isInputTriggered = true
-            }
-            // Reset gesture
-            isInGesture = false
-            resetGestureDataFloat()
-        }
 
         // Calculate essentials
         val offset = Pair(
@@ -260,28 +258,18 @@ class Keyboard (private val stack: Stack,
 
         // Move cursor
         if (isInGesture && currentGestureName == "moveCursor") {
-            var unprocessedSteps = calculateSteps(surface, gestureDistance, 32F)
+            val unprocessedSteps = calculateSteps(surface, gestureDistance, 32F)
             addToGestureDataInt("stepsDone", unprocessedSteps)
 
             if ((gestureDistance > minDistance && unprocessedSteps > 0) || unprocessedSteps < 0) {
 
-                val maxAntiDirection = getGestureDataInt("stepsDone")
-                if (-maxAntiDirection > unprocessedSteps) unprocessedSteps = -maxAntiDirection
+                /*val maxAntiDirection = getGestureDataInt("stepsDone")
+                if (-maxAntiDirection > unprocessedSteps) unprocessedSteps = -maxAntiDirection*/
 
                 emitInputCall(KeyboardInput(action = "moveCursor",
                     amount = gestureStartButton.amount!! * unprocessedSteps))
             }
         }
-
-        // Special symbols drag selection
-        if (isInGesture && currentGestureName == "specialSymbolsSetDragSelection") {
-            val unprocessedSteps = calculateSteps(surface, gestureDistance, 32F)
-            addToGestureDataInt("stepsDone", unprocessedSteps)
-
-            // Detect button
-        }
-
-        // State
 
         // Update state
         setGestureDataFloat("lastGestureDistance", gestureDistance)
