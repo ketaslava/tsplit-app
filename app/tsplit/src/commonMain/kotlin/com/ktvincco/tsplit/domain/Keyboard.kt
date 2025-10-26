@@ -245,7 +245,7 @@ class Keyboard (private val stack: Stack,
 
         // Delete
         if (isInGesture && currentGestureName == "deleteMultipleCharactersFromTheLeft") {
-            val unprocessedSteps = calculateSteps(surface, gestureDistance, 192F)
+            val unprocessedSteps = calculateSteps(surface, gestureDistance, 128F)
             addToGestureDataInt("stepsDone", unprocessedSteps)
 
             if ((gestureDistance > minDistance && unprocessedSteps > 0) || unprocessedSteps < 0) {
@@ -258,7 +258,7 @@ class Keyboard (private val stack: Stack,
 
         // Move cursor
         if (isInGesture && currentGestureName == "moveCursor") {
-            val unprocessedSteps = calculateSteps(surface, gestureDistance, 32F)
+            val unprocessedSteps = calculateSteps(surface, gestureDistance, 24F)
             addToGestureDataInt("stepsDone", unprocessedSteps)
 
             if ((gestureDistance > minDistance && unprocessedSteps > 0) || unprocessedSteps < 0) {
