@@ -221,18 +221,18 @@ val keyboardStack = Stack(listOf<Layer>(
         // Row 1
         Button(previewText = "I", inputText = "i"),
         Button(previewText = "Ю", inputText = "ю"),
-        Button(previewText = "Ж", inputText = "Ж"),
+        Button(previewText = "Ж", inputText = "ж"),
         Button(previewText = "З", inputText = "з"),
-        Button(previewText = "Б", inputText = "Б"),
+        Button(previewText = "Б", inputText = "б"),
         Button(previewText = "Ц", inputText = "ц"),
 
         // Row 2
         Button(previewText = "Ы", inputText = "ы"),
         Button(previewText = "Ч", inputText = "Ч"),
         Button(previewText = "Х", inputText = "Х"),
-        Button(previewText = "Й", inputText = "й"),
+        Button(previewText = "Й", inputText = "х"),
         Button(previewText = "Ш", inputText = "ш"),
-        Button(previewText = "Щ", inputText = "Щ"),
+        Button(previewText = "Щ", inputText = "щ"),
 
         // Row 3
         Button(previewText = "XX"),
