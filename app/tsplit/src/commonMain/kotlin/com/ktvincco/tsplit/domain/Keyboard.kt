@@ -1,5 +1,6 @@
 package com.ktvincco.tsplit.domain
 
+import androidx.compose.material.Button
 import androidx.compose.ui.graphics.Color
 import com.ktvincco.tsplit.Circle
 import com.ktvincco.tsplit.Rectangle
@@ -20,14 +21,18 @@ class Keyboard (private val stack: Stack,
     private var emitInputCall: (input: KeyboardInput) -> Unit = {}, private var logger: Logger) {
 
     var baseLayer = "latin1"
-    var inputLevel = 0
-    var isInputTriggered = false
+    var firstLayer = baseLayer
+    var isFirstLayerLocked = false
     var currentLayer = baseLayer
     var previewLayer = baseLayer
     var overlayLayer: String? = null
 
+    var inputLevel = 0
+    var isInputTriggered = false
+
     var isInGesture = false
     var gestureStartButton = Button()
+    var clickStartButton = Button()
     var currentGestureName = ""
     var currentGestureStartPosition = Pair(0F, 0F)
 
@@ -43,11 +48,15 @@ class Keyboard (private val stack: Stack,
         val newInputLevel = touchProcessor.updateAndCalculateInputLevel(touches)
 
         // Update layer
-        var newIsInputTriggered = isInputTriggered
+        // Layer lock
+        if (!isFirstLayerLocked) {
+            firstLayer = baseLayer
+        }
         // Always update
+        var newIsInputTriggered = isInputTriggered
         if (newInputLevel == 0) {
-            currentLayer = baseLayer
-            previewLayer = baseLayer
+            currentLayer = firstLayer
+            previewLayer = firstLayer
             newIsInputTriggered = false
             overlayLayer = null
         }
@@ -70,9 +79,8 @@ class Keyboard (private val stack: Stack,
         // Process layers
         // Preview layer
         val referenceLayerName = newPointers.current.button.referenceLayerName
-        var newPreviewLayer = previewLayer
         if (newInputLevel > 0 && !isInGesture) {
-            newPreviewLayer = referenceLayerName ?: currentLayer
+            previewLayer = referenceLayerName ?: currentLayer
         }
         // Overlay layer
         overlayLayer = null
@@ -91,6 +99,8 @@ class Keyboard (private val stack: Stack,
                 pointers.current.button.action}, ${pointers.current.button.amount}")
             // Process actions
             processActions(pointers.current.button)
+            // Process layer lock
+            processLayerLock(pointers.current.button, clickStartButton)
             // Initiate Input
             emitInputCall(KeyboardInput(inputText = pointers.current.button.inputText,
                 action = pointers.current.button.action, amount = pointers.current.button.amount))
@@ -107,6 +117,9 @@ class Keyboard (private val stack: Stack,
             currentGestureStartPosition = Pair(newPointers.current.x, newPointers.current.y)
             gestureStartButton = newPointers.current.button
         }
+        if (newInputLevel > inputLevel) {
+            clickStartButton = newPointers.current.button
+        }
         // Stop
         var isGestureWasJustFinished = false
         if (newInputLevel < inputLevel && isInGesture) {
@@ -122,7 +135,6 @@ class Keyboard (private val stack: Stack,
         pointers = newPointers
         inputLevel = newInputLevel
         isInputTriggered = newIsInputTriggered
-        previewLayer = newPreviewLayer
 
         // Draw
 
@@ -159,13 +171,39 @@ class Keyboard (private val stack: Stack,
     fun processActions(button: Button) {
         if (button.action == "changeScriptToLatin") {
             baseLayer = "latin1"
+            firstLayer = baseLayer
+            isFirstLayerLocked = false
+            currentLayer = firstLayer
+            previewLayer = firstLayer
         }
         if (button.action == "changeScriptToCyrillic") {
             baseLayer = "cyrillic1"
+            firstLayer = baseLayer
+            isFirstLayerLocked = false
+            currentLayer = firstLayer
+            previewLayer = firstLayer
         }
         /*if (button.action == "changeScriptToArabic") {
             baseLayer = "arabic1"
+            firstLayer = baseLayer
+            isFirstLayerLocked = false
         }*/
+    }
+
+
+    fun processLayerLock(button: Button, clickStartButton: Button) {
+        if (button.isLockReferenceLayerOnCompleteClick && button == clickStartButton) {
+            firstLayer = button.referenceLayerName?: baseLayer
+            isFirstLayerLocked = true
+            currentLayer = firstLayer
+            previewLayer = firstLayer
+        }
+        if (button.isUnlockLayerOnCompleteClick && button == clickStartButton) {
+            firstLayer = baseLayer
+            isFirstLayerLocked = false
+            currentLayer = firstLayer
+            previewLayer = firstLayer
+        }
     }
 
 

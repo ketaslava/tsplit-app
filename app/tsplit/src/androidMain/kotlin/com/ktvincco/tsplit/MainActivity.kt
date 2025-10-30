@@ -23,6 +23,7 @@ import com.ktvincco.tsplit.data.AndroidPermissionController
 import android.widget.ImageView
 import com.ktvincco.tsplit.domain.KeyboardInput
 import kotlin.collections.mutableListOf
+import android.content.res.Configuration
 
 
 /*class MainActivity : ComponentActivity() {
@@ -71,7 +72,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        keyboardView = layoutInflater.inflate(R.layout.keyboard_layout, null)
+        // Create view according to orientation
+        val orientation = resources.configuration.orientation
+        keyboardView = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            layoutInflater.inflate(R.layout.keyboard_layout_landscape, null)
+        } else {
+            layoutInflater.inflate(R.layout.keyboard_layout, null)
+        }
 
         setContentView(keyboardView)
 
@@ -186,8 +193,19 @@ class MyKeyboardService : InputMethodService() {
     var keyboardImageView: ImageView? = null
 
     override fun onCreateInputView(): View {
-        keyboardView = layoutInflater.inflate(R.layout.keyboard_layout, null)
+
+        // Create view according to orientation
+        val orientation = resources.configuration.orientation
+        keyboardView = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            layoutInflater.inflate(R.layout.keyboard_layout_landscape, null)
+        } else {
+            layoutInflater.inflate(R.layout.keyboard_layout, null)
+        }
+
+        // Log
         Log.i("MyKeyboardService", "ON CREATE !!!!!!!!!!!!")
+
+        // Return view
         return keyboardView!!
     }
 
