@@ -142,7 +142,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "G", inputText = "G", referenceLayerName = "latinCapital2", shiftIndicator = true),
         Button(previewText = "F", inputText = "F", referenceLayerName = "latinCapital2", shiftIndicator = true),
         Button(previewText = "SP", inputText = " ", referenceLayerName = "latinCapital2"),
-        Button(previewText = "DE", action = "deleteCharacterFromTheLeft", gestureName = "deleteMultipleCharactersFromTheLeft", longPressAction = "deleteMultipleCharactersFromTheLeft", gestureIndicator = true),
+        Button(previewText = "\\N", inputText = "\n"),
 
         )),
     Layer("latinCapital2",listOf<Button>(
@@ -284,7 +284,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "Г", inputText = "Г", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "П", inputText = "П", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "SP", inputText = " ", referenceLayerName = "cyrillicCapital2"),
-        Button(previewText = "DE", action = "deleteCharacterFromTheLeft", gestureName = "deleteMultipleCharactersFromTheLeft", longPressAction = "deleteMultipleCharactersFromTheLeft", gestureIndicator = true),
+        Button(previewText = "\\N", inputText = "\n"),
 
         )),
     Layer("cyrillicCapital2",listOf<Button>(
