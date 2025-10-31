@@ -24,6 +24,10 @@ import android.widget.ImageView
 import com.ktvincco.tsplit.domain.KeyboardInput
 import kotlin.collections.mutableListOf
 import android.content.res.Configuration
+import android.media.AudioAttributes
+import android.media.SoundPool
+import java.io.IOException
+import kotlin.collections.set
 
 
 /*class MainActivity : ComponentActivity() {
@@ -68,6 +72,10 @@ class MainActivity : ComponentActivity() {
     var keyboardView: View? = null
     var keyboardImageView: ImageView? = null
 
+    // Sound
+    private lateinit var soundPool: SoundPool
+    private val soundMap = mutableMapOf<String, Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -80,11 +88,19 @@ class MainActivity : ComponentActivity() {
             layoutInflater.inflate(R.layout.keyboard_layout, null)
         }
 
-        setContentView(keyboardView)
+        // Sound
+        // Initialize SoundPool for short overlapping sounds
+        val audioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
+        soundPool = SoundPool.Builder()
+            .setMaxStreams(10) // allow overlapping sounds
+            .setAudioAttributes(audioAttributes)
+            .build()
 
-        /*setContent {
-            App(androidLogger, permissionController, androidDatabase, environmentConnector)
-        }*/
+        // Set view
+        setContentView(keyboardView)
     }
 
     fun getKeyboardImageViewSize(): Pair<Int, Int> {
@@ -97,6 +113,7 @@ class MainActivity : ComponentActivity() {
         assignListeners()
         Log.i("MyKeyboardService", "ON UI " + "${keyboardImageView!!.width}")
         keyboardService = KeyboardService({emitInput(it)},
+            { playSound(it) },
             {getKeyboardImageViewSize()},
             {getTouchesList()}, {onNewFrame(it)},
             androidLogger, permissionController, androidDatabase, environmentConnector)
@@ -105,6 +122,32 @@ class MainActivity : ComponentActivity() {
 
     fun emitInput(input: KeyboardInput) {
         // Empty
+    }
+
+    fun playSound(soundResource: String) {
+        // If sound already loaded, play it immediately
+        val soundId = soundMap[soundResource]
+        if (soundId != null) {
+            soundPool.play(soundId, 1f, 1f, 0, 0, 1f)
+            return
+        }
+
+        // Otherwise load it from assets
+        try {
+            assets.openFd(soundResource).use { afd ->
+                val newSoundId = soundPool.load(afd, 1)
+                soundMap[soundResource] = newSoundId
+
+                // Play as soon as it finishes loading
+                soundPool.setOnLoadCompleteListener { sp, sampleId, status ->
+                    if (status == 0 && sampleId == newSoundId) {
+                        sp.play(sampleId, 1f, 1f, 0, 0, 1f)
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
     val touches: MutableList<MutableMap<String, String>> = mutableListOf() // (x, y)
@@ -166,6 +209,7 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stop()
+        soundPool.release()
     }
 
     // Permissions request callback
@@ -192,6 +236,10 @@ class MyKeyboardService : InputMethodService() {
     var keyboardView: View? = null
     var keyboardImageView: ImageView? = null
 
+    // Sound
+    private lateinit var soundPool: SoundPool
+    private val soundMap = mutableMapOf<String, Int>()
+
     override fun onCreateInputView(): View {
 
         // Create view according to orientation
@@ -201,6 +249,17 @@ class MyKeyboardService : InputMethodService() {
         } else {
             layoutInflater.inflate(R.layout.keyboard_layout, null)
         }
+
+        // Sound
+        // Initialize SoundPool for short overlapping sounds
+        val audioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
+        soundPool = SoundPool.Builder()
+            .setMaxStreams(10) // allow overlapping sounds
+            .setAudioAttributes(audioAttributes)
+            .build()
 
         // Log
         Log.i("MyKeyboardService", "ON CREATE !!!!!!!!!!!!")
@@ -272,6 +331,32 @@ class MyKeyboardService : InputMethodService() {
         //Log.i("MyKeyboardService", "Input committed: $input")
     }
 
+    fun playSound(soundResource: String) {
+        // If sound already loaded, play it immediately
+        val soundId = soundMap[soundResource]
+        if (soundId != null) {
+            soundPool.play(soundId, 1f, 1f, 0, 0, 1f)
+            return
+        }
+
+        // Otherwise load it from assets
+        try {
+            assets.openFd(soundResource).use { afd ->
+                val newSoundId = soundPool.load(afd, 1)
+                soundMap[soundResource] = newSoundId
+
+                // Play as soon as it finishes loading
+                soundPool.setOnLoadCompleteListener { sp, sampleId, status ->
+                    if (status == 0 && sampleId == newSoundId) {
+                        sp.play(sampleId, 1f, 1f, 0, 0, 1f)
+                    }
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
     fun getKeyboardImageViewSize(): Pair<Int, Int> {
         return Pair(keyboardImageView!!.width, keyboardImageView!!.height)
     }
@@ -284,6 +369,7 @@ class MyKeyboardService : InputMethodService() {
         if (keyboardService == null) {
             keyboardService = KeyboardService(
                 { emitInput(it) },
+                { playSound(it) },
                 { getKeyboardImageViewSize() },
                 { getTouchesList() }, { onNewFrame(it) },
                 androidLogger, permissionController,
@@ -348,6 +434,7 @@ class MyKeyboardService : InputMethodService() {
     override fun onDestroy() {
         super.onDestroy()
         stop()
+        soundPool.release()
     }
 }
 

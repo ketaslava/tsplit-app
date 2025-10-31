@@ -166,13 +166,27 @@ tasks.register<Copy>("copySharedImagesToAndroid") {
     from("src/commonMain/composeResources/drawable")
     into("src/androidMain/assets")
 }
+tasks.named("preBuild") {
+    dependsOn("copySharedImagesToAndroid")
+}
+tasks.register<Copy>("copySharedFilesToAndroid") {
+    from("src/commonMain/composeResources/files")
+    into("src/androidMain/assets")
+}
+tasks.named("preBuild") {
+    dependsOn("copySharedFilesToAndroid")
+}
 tasks.register<Copy>("copySharedImagesToDesktop") {
     from("src/commonMain/composeResources/drawable")
     into("src/desktopMain/assets")
 }
 tasks.named("preBuild") {
-    dependsOn("copySharedImagesToAndroid")
+    dependsOn("copySharedImagesToDesktop")
+}
+tasks.register<Copy>("copySharedFilesToDesktop") {
+    from("src/commonMain/composeResources/files")
+    into("src/desktopMain/assets")
 }
 tasks.named("preBuild") {
-    dependsOn("copySharedImagesToDesktop")
+    dependsOn("copySharedFilesToDesktop")
 }

@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 
 
 class KeyboardService(private var emitInputCall: (input: KeyboardInput) -> Unit,
+                      private var playSoundCall: (soundResource: String) -> Unit,
                       private var getKeyboardImageViewSize: () -> Pair<Int, Int>,
                       private var getTouches: () -> List<Map<String, String>>,
                       private var onNewFrame: (surface2D: Surface2D) -> Unit,
@@ -27,7 +28,7 @@ class KeyboardService(private var emitInputCall: (input: KeyboardInput) -> Unit,
 
 
     private var scope: CoroutineScope? = null
-    val keyboard = Keyboard(keyboardStack, emitInputCall, logger)
+    val keyboard = Keyboard(keyboardStack, emitInputCall, playSoundCall, logger)
 
 
     fun start() {

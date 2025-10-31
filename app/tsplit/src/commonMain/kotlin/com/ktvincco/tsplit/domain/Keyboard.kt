@@ -1,6 +1,5 @@
 package com.ktvincco.tsplit.domain
 
-import androidx.compose.material.Button
 import androidx.compose.ui.graphics.Color
 import com.ktvincco.tsplit.Circle
 import com.ktvincco.tsplit.Rectangle
@@ -12,13 +11,14 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlin.collections.set
 import kotlin.math.round
 import kotlin.math.sqrt
 
 
 class Keyboard (private val stack: Stack,
-    private var emitInputCall: (input: KeyboardInput) -> Unit = {}, private var logger: Logger) {
+                private var emitInputCall: (input: KeyboardInput) -> Unit = {},
+                private var playSoundCall: (soundResource: String) -> Unit = {},
+                private var logger: Logger) {
 
     var baseLayer = "latin1"
     var firstLayer = baseLayer
@@ -36,10 +36,13 @@ class Keyboard (private val stack: Stack,
     var currentGestureName = ""
     var currentGestureStartPosition = Pair(0F, 0F)
 
+    var isSoundEnabled = false
+
     var touchProcessor = TouchProcessor(logger)
     var pointers = Pointers(Pointer(Button(), false, "0",
         0F, 0F, 0, 0), null)
     var graphics = Graphics()
+
 
     fun update(targetSurface: Surface2D, touches: List<Map<String, String>>): Surface2D {
         var surface = targetSurface
@@ -104,6 +107,10 @@ class Keyboard (private val stack: Stack,
             // Initiate Input
             emitInputCall(KeyboardInput(inputText = pointers.current.button.inputText,
                 action = pointers.current.button.action, amount = pointers.current.button.amount))
+            // Play sound
+            if (pointers.current.button.inputText != null && isSoundEnabled) {
+                playSoundCall("vine-boom.wav")
+            }
             // Set state
             newIsInputTriggered = true
         }
@@ -169,6 +176,8 @@ class Keyboard (private val stack: Stack,
 
 
     fun processActions(button: Button) {
+
+        // Scripts
         if (button.action == "changeScriptToLatin") {
             baseLayer = "latin1"
             firstLayer = baseLayer
@@ -188,6 +197,11 @@ class Keyboard (private val stack: Stack,
             firstLayer = baseLayer
             isFirstLayerLocked = false
         }*/
+
+        // Sound
+        if (button.action == "switchTheSound") {
+            isSoundEnabled = !isSoundEnabled
+        }
     }
 
 

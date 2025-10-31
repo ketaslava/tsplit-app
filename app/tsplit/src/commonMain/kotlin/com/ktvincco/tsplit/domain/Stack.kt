@@ -356,7 +356,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(),
         Button(),
         Button(),
-        Button(),
+        Button(previewText = "SD", action = "switchTheSound"),
         Button(),
     )),
     Layer("specialSymbolsSetDragSelector1",listOf<Button?>(
