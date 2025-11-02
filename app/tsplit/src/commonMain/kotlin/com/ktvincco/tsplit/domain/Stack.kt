@@ -206,7 +206,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "Ь", inputText = "ь", referenceLayerName = "cyrillic2"),
         Button(previewText = "К", inputText = "к", referenceLayerName = "cyrillic2"),
         Button(previewText = "М", inputText = "м", referenceLayerName = "cyrillic2"),
-        Button(previewText = "D", inputText = "d", referenceLayerName = "cyrillic2"),
+        Button(previewText = "D", inputText = "д", referenceLayerName = "cyrillic2"),
         Button(previewText = "SH", referenceLayerName = "cyrillicCapital1", isLockReferenceLayerOnCompleteClick = true),
 
         // Row 4
@@ -275,7 +275,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "Ь", inputText = "Ь", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "К", inputText = "К", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "М", inputText = "М", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
-        Button(previewText = "D", inputText = "D", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
+        Button(previewText = "D", inputText = "Д", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "XX", referenceLayerName = "cyrillicCapital1", isUnlockLayerOnCompleteClick = true),
 
         // Row 4
