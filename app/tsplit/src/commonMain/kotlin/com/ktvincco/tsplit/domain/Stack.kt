@@ -60,12 +60,12 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "O", inputText = "o", referenceLayerName = "latin2"),
 
         // Row 3
-        Button(previewText = "SH", referenceLayerName = "latinCapital1", isLockReferenceLayerOnCompleteClick = true),
+        Button(previewText = "SH", referenceLayerName = "latinCapital1", isLockReferenceLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
         Button(previewText = "H", inputText = "h", referenceLayerName = "latin2"),
         Button(previewText = "C", inputText = "c", referenceLayerName = "latin2"),
         Button(previewText = "M", inputText = "m", referenceLayerName = "latin2"),
         Button(previewText = "D", inputText = "d", referenceLayerName = "latin2"),
-        Button(previewText = "SH", referenceLayerName = "latinCapital1", isLockReferenceLayerOnCompleteClick = true),
+        Button(previewText = "SH", referenceLayerName = "latinCapital1", isLockReferenceLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
 
         // Row 4
         Button(previewText = "1", inputText = "1", referenceLayerName = "numpad1", overlayLayer = "specialSymbolsSetDragSelector1", gestureIndicator = true),
@@ -95,12 +95,12 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "!", inputText = "!"),
 
         // Row 3
-        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
         Button(previewText = ".", inputText = "."),
         Button(previewText = "'", inputText = "'"),
         Button(previewText = "\"", inputText = "\""),
         Button(previewText = ",", inputText = ","),
-        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
 
         // Row 4
         Button(previewText = "SC", referenceLayerName = "scriptSelector", stackIndicator = true),
@@ -129,12 +129,12 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "O", inputText = "O", referenceLayerName = "latinCapital2", shiftIndicator = true),
 
         // Row 3
-        Button(previewText = "XX", referenceLayerName = "latinCapital1", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", referenceLayerName = "latinCapital1", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
         Button(previewText = "H", inputText = "H", referenceLayerName = "latinCapital2", shiftIndicator = true),
         Button(previewText = "C", inputText = "C", referenceLayerName = "latinCapital2", shiftIndicator = true),
         Button(previewText = "M", inputText = "M", referenceLayerName = "latinCapital2", shiftIndicator = true),
         Button(previewText = "D", inputText = "D", referenceLayerName = "latinCapital2", shiftIndicator = true),
-        Button(previewText = "XX", referenceLayerName = "latinCapital1", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", referenceLayerName = "latinCapital1", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
 
         // Row 4
         Button(previewText = "Ø", inputText = "Ø", referenceLayerName = "specialLettersCapital1", overlayLayer = "specialSymbolsSetDragSelectorCapital1", gestureIndicator = true),
@@ -142,7 +142,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "G", inputText = "G", referenceLayerName = "latinCapital2", shiftIndicator = true),
         Button(previewText = "F", inputText = "F", referenceLayerName = "latinCapital2", shiftIndicator = true),
         Button(previewText = "SP", inputText = " ", referenceLayerName = "latinCapital2"),
-        Button(previewText = "\\N", inputText = "\n"),
+        Button(previewText = "DE", action = "deleteCharacterFromTheLeft", gestureName = "deleteMultipleCharactersFromTheLeft", longPressAction = "deleteMultipleCharactersFromTheLeft", gestureIndicator = true),
 
         )),
     Layer("latinCapital2",listOf<Button>(
@@ -164,12 +164,12 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "$", inputText = "$", shiftIndicator = true),
 
         // Row 3
-        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
         Button(previewText = "-", inputText = "-", shiftIndicator = true),
         Button(previewText = "{", inputText = "{", shiftIndicator = true),
         Button(previewText = "}", inputText = "}", shiftIndicator = true),
         Button(previewText = "—", inputText = "—", shiftIndicator = true),
-        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
 
         // Row 4
         Button(previewText = "SC", referenceLayerName = "scriptSelector", stackIndicator = true),
@@ -177,7 +177,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "[", inputText = "[", shiftIndicator = true),
         Button(previewText = "]", inputText = "]", shiftIndicator = true),
         Button(previewText = "<-", action = "moveCursor", amount = -1, gestureName = "moveCursor", gestureIndicator = true),
-        Button(previewText = "EN", action = "enter"),
+        Button(previewText = "DE", action = "deleteCharacterFromTheLeft", gestureName = "deleteMultipleCharactersFromTheLeft", longPressAction = "deleteMultipleCharactersFromTheLeft", gestureIndicator = true),
 
     )),
 
@@ -202,12 +202,12 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "О", inputText = "о", referenceLayerName = "cyrillic2"),
 
         // Row 3
-        Button(previewText = "SH", referenceLayerName = "cyrillicCapital1", isLockReferenceLayerOnCompleteClick = true),
+        Button(previewText = "SH", referenceLayerName = "cyrillicCapital1", isLockReferenceLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
         Button(previewText = "Ь", inputText = "ь", referenceLayerName = "cyrillic2"),
         Button(previewText = "К", inputText = "к", referenceLayerName = "cyrillic2"),
         Button(previewText = "М", inputText = "м", referenceLayerName = "cyrillic2"),
         Button(previewText = "D", inputText = "д", referenceLayerName = "cyrillic2"),
-        Button(previewText = "SH", referenceLayerName = "cyrillicCapital1", isLockReferenceLayerOnCompleteClick = true),
+        Button(previewText = "SH", referenceLayerName = "cyrillicCapital1", isLockReferenceLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
 
         // Row 4
         Button(previewText = "1", inputText = "1", referenceLayerName = "numpad1", overlayLayer = "specialSymbolsSetDragSelector1", gestureIndicator = true),
@@ -237,12 +237,12 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "Щ", inputText = "щ"),
 
         // Row 3
-        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
         Button(previewText = ".", inputText = "."),
         Button(previewText = "Ф", inputText = "ф"),
         Button(previewText = "Э", inputText = "э"),
         Button(previewText = ",", inputText = ","),
-        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
 
         // Row 4
         Button(previewText = "SC", referenceLayerName = "scriptSelector", stackIndicator = true),
@@ -271,12 +271,12 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "О", inputText = "О", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
 
         // Row 3
-        Button(previewText = "XX", referenceLayerName = "cyrillicCapital1", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", referenceLayerName = "cyrillicCapital1", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
         Button(previewText = "Ь", inputText = "Ь", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "К", inputText = "К", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "М", inputText = "М", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "D", inputText = "Д", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
-        Button(previewText = "XX", referenceLayerName = "cyrillicCapital1", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", referenceLayerName = "cyrillicCapital1", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
 
         // Row 4
         Button(previewText = "Ø", inputText = "Ø", referenceLayerName = "specialLettersCapital1", overlayLayer = "specialSymbolsSetDragSelector2", gestureIndicator = true),
@@ -284,7 +284,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "Г", inputText = "Г", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "П", inputText = "П", referenceLayerName = "cyrillicCapital2", shiftIndicator = true),
         Button(previewText = "SP", inputText = " ", referenceLayerName = "cyrillicCapital2"),
-        Button(previewText = "\\N", inputText = "\n"),
+        Button(previewText = "DE", action = "deleteCharacterFromTheLeft", gestureName = "deleteMultipleCharactersFromTheLeft", longPressAction = "deleteMultipleCharactersFromTheLeft", gestureIndicator = true),
 
         )),
     Layer("cyrillicCapital2",listOf<Button>(
@@ -306,12 +306,12 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "Щ", inputText = "Щ", shiftIndicator = true),
 
         // Row 3
-        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
         Button(previewText = ".", inputText = ".", shiftIndicator = true),
         Button(previewText = "Ф", inputText = "Ф", shiftIndicator = true),
         Button(previewText = "Э", inputText = "Э", shiftIndicator = true),
         Button(previewText = ",", inputText = ",", shiftIndicator = true),
-        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true),
+        Button(previewText = "XX", isUnlockLayerOnCompleteClick = true, overlayLayer = "nextLineOverlay"),
 
         // Row 4
         Button(previewText = "SC", referenceLayerName = "scriptSelector", stackIndicator = true),
@@ -319,7 +319,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(previewText = "Ё", inputText = "Ё", shiftIndicator = true),
         Button(previewText = "Ъ", inputText = "Ъ", shiftIndicator = true),
         Button(previewText = "<-", action = "moveCursor", amount = -1, gestureName = "moveCursor", gestureIndicator = true),
-        Button(previewText = "EN", action = "enter"),
+        Button(previewText = "DE", action = "deleteCharacterFromTheLeft", gestureName = "deleteMultipleCharactersFromTheLeft", longPressAction = "deleteMultipleCharactersFromTheLeft", gestureIndicator = true),
 
         )),
 
@@ -425,6 +425,44 @@ val keyboardStack = Stack(listOf<Layer>(
         null,
         null,
         null,
+    )),
+
+    // Next line overlay
+
+    Layer("nextLineOverlay",listOf<Button?>(
+
+        // Row 1
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+
+        // Row 2
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+
+        // Row 3
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+
+        // Row 4
+        null,
+        null,
+        null,
+        null,
+        null,
+        Button(previewText = "\\N", inputText = "\n"),
+
     )),
 
     // Numpad
