@@ -79,6 +79,9 @@ class Keyboard (private val stack: Stack,
             Pair(0F, 0F), 4, 6,
             stack, currentLayer, overlayLayer)
 
+        // Process
+        updateLongPressActions(newPointers, pointers)
+
         // Process layers
         // Preview layer
         val referenceLayerName = newPointers.current.button.referenceLayerName
@@ -103,7 +106,7 @@ class Keyboard (private val stack: Stack,
             // Process actions
             processActions(pointers.current.button)
             // Process layer lock
-            processLayerLock(pointers.current.button, clickStartButton)
+            processLayerLockByCompleteClick(pointers.current.button, clickStartButton)
             // Initiate Input
             emitInputCall(KeyboardInput(inputText = pointers.current.button.inputText,
                 action = pointers.current.button.action, amount = pointers.current.button.amount))
@@ -168,7 +171,6 @@ class Keyboard (private val stack: Stack,
 
         // Process
         surface = updateGestures(surface, isGestureWasJustFinished)
-        updateLongPressActions()
 
         // Return
         return surface
@@ -198,6 +200,13 @@ class Keyboard (private val stack: Stack,
             isFirstLayerLocked = false
         }*/
 
+        if (button.action == "unlockReferenceLayer") {
+            firstLayer = baseLayer
+            isFirstLayerLocked = false
+            currentLayer = firstLayer
+            previewLayer = firstLayer
+        }
+
         // Sound
         if (button.action == "switchTheSound") {
             isSoundEnabled = !isSoundEnabled
@@ -205,7 +214,7 @@ class Keyboard (private val stack: Stack,
     }
 
 
-    fun processLayerLock(button: Button, clickStartButton: Button) {
+    fun processLayerLockByCompleteClick(button: Button, clickStartButton: Button) {
         if (button.isLockReferenceLayerOnCompleteClick && button == clickStartButton) {
             firstLayer = button.referenceLayerName?: baseLayer
             isFirstLayerLocked = true
@@ -222,27 +231,56 @@ class Keyboard (private val stack: Stack,
 
 
     var longPressAction = CoroutineScope(Dispatchers.Main)
-    suspend fun processLongPressAction() {
+    var isConsiderLayerLockByLongPress = false
+    fun processLongPressActions(newPointers: Pointers, pointers: Pointers) {
+
+        // Reset state
+        isConsiderLayerLockByLongPress = false
 
         if (pointers.current.button.longPressAction == "deleteMultipleCharactersFromTheLeft" &&
-            getGestureDataInt("stepsDone") == 0) {
+                getGestureDataInt("stepsDone") == 0) {
             emitInputCall(KeyboardInput(action = "deleteCharacterFromTheLeft"))
         }
+
+        // Lock the reference layer by long press (long press)
+        if (pointers.current.button.longPressAction == "lockReferenceLayer" &&
+                getGestureDataInt("stepsDone") == 0 && !isFirstLayerLocked) {
+            // Set state
+            isConsiderLayerLockByLongPress = true
+        }
     }
-    fun updateLongPressActions() {
-        if (pointers.current.button.longPressAction != null && pointers.current.isPressed) {
+    fun processLongPressActionsOnRelease(newPointers: Pointers, pointers: Pointers) {
+
+        // Lock the reference layer by long press (check is click completed)
+        if (pointers.current.button.longPressAction == "lockReferenceLayer" &&
+                isConsiderLayerLockByLongPress) {
+            // Lock layer
+            firstLayer = pointers.current.button.referenceLayerName?: baseLayer
+            isFirstLayerLocked = true
+            currentLayer = firstLayer
+            previewLayer = firstLayer
+            // Set state
+            isConsiderLayerLockByLongPress = false
+        }
+
+        // Reset state
+        isConsiderLayerLockByLongPress = false
+    }
+    fun updateLongPressActions(newPointers: Pointers, pointers: Pointers) {
+        if (pointers.current.button.longPressAction != null && newPointers.current.isPressed) {
             if (!longPressAction.isActive) {
                 longPressAction = CoroutineScope(Dispatchers.Main)
                 longPressAction.launch {
                     delay(333)
                     while (isActive) {
-                        processLongPressAction()
+                        processLongPressActions(newPointers, pointers)
                         delay(50)
                     }
                 }
             }
         } else {
             longPressAction.cancel()
+            processLongPressActionsOnRelease(newPointers, pointers)
         }
     }
 
