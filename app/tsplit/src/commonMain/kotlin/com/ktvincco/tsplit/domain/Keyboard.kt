@@ -119,10 +119,11 @@ class Keyboard (private val stack: Stack,
         }
 
         // Process gestures
+        var newIsInGesture = isInGesture
         // Start
         val gestureName = newPointers.current.button.gestureName
         if (gestureName != null && newInputLevel > inputLevel && !isInGesture) {
-            isInGesture = true
+            newIsInGesture = true
             currentGestureName = gestureName
             currentGestureStartPosition = Pair(newPointers.current.x, newPointers.current.y)
             gestureStartButton = newPointers.current.button
@@ -132,11 +133,11 @@ class Keyboard (private val stack: Stack,
         }
         // Stop
         var isGestureWasJustFinished = false
-        if (newInputLevel < inputLevel && isInGesture) {
+        if (newInputLevel != inputLevel && isInGesture) {
             // Set state and reset data
             isGestureWasJustFinished = true
             newIsInputTriggered = true
-            isInGesture = false
+            newIsInGesture = false
             resetGestureDataFloat()
             resetGestureDataInt()
         }
@@ -145,6 +146,7 @@ class Keyboard (private val stack: Stack,
         pointers = newPointers
         inputLevel = newInputLevel
         isInputTriggered = newIsInputTriggered
+        isInGesture = newIsInGesture
 
         // Draw
 
