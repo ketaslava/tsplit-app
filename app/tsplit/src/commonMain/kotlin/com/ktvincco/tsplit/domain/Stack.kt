@@ -1040,7 +1040,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(),
         Button(previewText = "!", inputText = "!"),
         Button(previewText = "?", inputText = "?"),
-        Button(previewText = "/", inputText = "/"),
+        Button(previewText = "‽", inputText = "‽"),
         Button(previewText = ":/", inputText = "https://"),
 
         // Row 3
@@ -1074,7 +1074,7 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(),
         Button(previewText = "¡", inputText = "¡"),
         Button(previewText = "¿", inputText = "¿"),
-        Button(previewText = "‽", inputText = "‽"),
+        Button(previewText = "⸮", inputText = "⸮"),
         Button(previewText = "±", inputText = "±"),
 
         // Row 3
