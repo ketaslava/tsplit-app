@@ -379,7 +379,7 @@ val keyboardStack = Stack(listOf<Layer>(
 
         // Row 3
         Button(previewText = "@", inputText = "@", referenceLayerName = "specialSymbols1", overlayLayer = "specialSymbolsSetDragSelector1"),
-        Button(previewText = "Ø", inputText = "Ø", referenceLayerName = "specialLetters1", overlayLayer = "specialSymbolsSetDragSelector1"),
+        Button(previewText = "ß", inputText = "ß", referenceLayerName = "specialLetters1", overlayLayer = "specialSymbolsSetDragSelector1"),
         null,
         null,
         null,
@@ -607,9 +607,9 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(),
         Button(),
         Button(previewText = "μ", inputText = "μ"),
+        Button(previewText = "ẞ", inputText = "ẞ"),
         Button(previewText = "ß", inputText = "ß"),
         Button(previewText = "ç", inputText = "ç"),
-        Button(previewText = "", inputText = ""),
     )),
 
     Layer("specialLettersCapital1",listOf<Button>(
@@ -643,8 +643,8 @@ val keyboardStack = Stack(listOf<Layer>(
         Button(),
         Button(previewText = "", inputText = ""),
         Button(previewText = "ẞ", inputText = "ẞ"),
+        Button(previewText = "ß", inputText = "ß"),
         Button(previewText = "Ç", inputText = "Ç"),
-        Button(previewText = "", inputText = ""),
     )),
 
     Layer("currencies1",listOf<Button>(
