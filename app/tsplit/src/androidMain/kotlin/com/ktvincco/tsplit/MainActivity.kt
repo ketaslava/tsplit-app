@@ -31,8 +31,10 @@ import android.media.SoundPool
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.Switch
 import java.io.IOException
 import kotlin.collections.set
+import androidx.core.content.edit
 
 
 /*class MainActivity : ComponentActivity() {
@@ -67,6 +69,9 @@ import kotlin.collections.set
 
 class MainActivity : ComponentActivity() {
 
+    private val PREFS_NAME = "keyboard_prefs"
+    private val KEY_BOTTOM_LINE_ENABLED = "bottom_line_enabled"
+
     // Create platform components
     private val androidLogger = AndroidLogger()
     private val permissionController = AndroidPermissionController(this)
@@ -76,6 +81,7 @@ class MainActivity : ComponentActivity() {
 
     var keyboardView: View? = null
     var keyboardImageView: ImageView? = null
+    var bottomLineSwitch: Switch? = null
 
     // Sound
     private var soundPool: SoundPool? = null
@@ -88,6 +94,19 @@ class MainActivity : ComponentActivity() {
         // Create view
         keyboardView = layoutInflater.inflate(R.layout.app_keyboard_test_layout, null)
 
+        // Bottom line switching
+        bottomLineSwitch = keyboardView?.findViewById(R.id.bottomLineSwitch)
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val isBottomLineEnabled = prefs.getBoolean(KEY_BOTTOM_LINE_ENABLED, true)
+        bottomLineSwitch?.isChecked = isBottomLineEnabled
+        bottomLineSwitch?.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit {
+                putBoolean(KEY_BOTTOM_LINE_ENABLED, isChecked)
+            }
+            updateBottomLine()
+        }
+        updateBottomLine()
+
         // Assign callbacks to the buttons
         assignButtonCallbacks()
 
@@ -96,6 +115,24 @@ class MainActivity : ComponentActivity() {
 
         // Set view
         setContentView(keyboardView)
+    }
+
+
+    fun updateBottomLine() {
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val isEnabled = prefs.getBoolean(KEY_BOTTOM_LINE_ENABLED, true)
+
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+        val panelHeight = (screenHeight * 0.052f).toInt()
+
+        val bottomLine = keyboardView?.findViewById<ImageView>(R.id.bottomLine)
+
+        bottomLine?.layoutParams = bottomLine.layoutParams?.apply {
+            height = if (isEnabled) panelHeight else 0
+        }
+
+        bottomLine?.requestLayout()
     }
 
 
@@ -274,6 +311,9 @@ class MainActivity : ComponentActivity() {
 
 class MyKeyboardService : InputMethodService() {
 
+    private val PREFS_NAME = "keyboard_prefs"
+    private val KEY_BOTTOM_LINE_ENABLED = "bottom_line_enabled"
+
     private val androidLogger = AndroidLogger()
     private val permissionController = AndroidPermissionController(null)
     private val androidDatabase = AndroidDatabase(null, AppInfo.NAME)
@@ -305,6 +345,24 @@ class MyKeyboardService : InputMethodService() {
 
         // Return view
         return keyboardView!!
+    }
+
+
+    fun updateBottomLine() {
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val isEnabled = prefs.getBoolean(KEY_BOTTOM_LINE_ENABLED, true)
+
+        val displayMetrics = resources.displayMetrics
+        val screenHeight = displayMetrics.heightPixels
+        val panelHeight = (screenHeight * 0.052f).toInt()
+
+        val bottomLine = keyboardView?.findViewById<ImageView>(R.id.bottomLine)
+
+        bottomLine?.layoutParams = bottomLine.layoutParams?.apply {
+            height = if (isEnabled) panelHeight else 0
+        }
+
+        bottomLine?.requestLayout()
     }
 
 
@@ -455,6 +513,7 @@ class MyKeyboardService : InputMethodService() {
             )
         }
         keyboardService?.start()
+        updateBottomLine()
     }
 
     val touches: MutableList<MutableMap<String, String>> = mutableListOf() // (x, y)
