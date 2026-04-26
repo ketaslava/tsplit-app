@@ -44,7 +44,7 @@ class KeyboardService(private var emitInputCall: (input: KeyboardInput) -> Unit,
             }
         }
 
-        logger.log("AAAA", "BBB!!!!BBB")
+        // logger.log("AAAA", "BBB!!!!BBB")
     }
 
 

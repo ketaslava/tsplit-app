@@ -330,7 +330,13 @@ class Keyboard (private val stack: Stack,
             pointers.current.x - currentGestureStartPosition.first,
             pointers.current.y - currentGestureStartPosition.second
         )
-        val gestureDistance = sqrt(offset.first * offset.first + offset.second * offset.second)
+        var gestureDistance = sqrt(offset.first * offset.first + offset.second * offset.second)
+        // Zero-out pointer protection
+        if ((pointers.current.x == 0F && pointers.current.y == 0F) ||
+            (currentGestureStartPosition.first == 0F && currentGestureStartPosition.second == 0F)) {
+            gestureDistance = 0F
+        }
+        // Min distance
         val minDistance = surface.width / 6F
 
         // Gestures
